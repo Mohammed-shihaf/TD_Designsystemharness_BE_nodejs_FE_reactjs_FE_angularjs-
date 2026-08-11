@@ -1,0 +1,36 @@
+BUILD COMMANDS
+===============
+backend:
+  cd backend && npm install && npm test && npm start   # listens on $PORT or 3000
+
+frontend-react:
+  cd frontend-react && npm install && npm run build      # vite build, real verified
+
+frontend-angular:
+  cd frontend-angular && npm install && npx ng build && npx ng test --watch=false --browsers=ChromeHeadless
+
+ARCHITECTURE
+============
+Design-System Cross-Framework Test Harness: ONE backend is the single
+source of truth for design tokens (color, spacing, typography); BOTH
+frontends fetch the same tokens and render using them.
+
+  backend/src/app.js
+    GET /api/design-tokens   <- shared color/spacing/typography tokens
+    GET /health
+
+  frontend-react/     fetches /api/design-tokens, renders using them
+  frontend-angular/   fetches /api/design-tokens, renders using them
+
+Both frontends consume the IDENTICAL token payload, so their rendered
+output can be parity-tested against each other - a real cross-
+framework consistency check, not disconnected apps sharing nothing.
+Contrast with the Micro-Frontend Platform (iframe embedding), the
+Migration Bridge (route splitting), and the SaaS Platform (API
+namespace split) - here the connection is a shared data contract both
+frontends must render identically.
+
+  backend/quality/          13 real JS code-quality tool fixtures
+  frontend-angular/quality/ 21 real TypeScript code-quality tool fixtures
+  (no duplication: JS tools live once in backend/, TS tools live once
+  in frontend-angular/; frontend-react connects via real API calls)
