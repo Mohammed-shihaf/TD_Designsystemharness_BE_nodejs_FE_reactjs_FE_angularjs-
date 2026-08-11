@@ -1,0 +1,12 @@
+tool: stryker-js
+language: javascript
+language_version: "22"
+technique: "Mutation Testing"
+classification: "Mutation Score"
+target_files: [../../src/app.js, ../../stryker.conf.json]
+run:
+  command: "npx stryker run"
+expects:
+  mutants_generated_and_tested: true
+verified_in_session: true
+verified_result: "real mutation run: 33.33% mutation score, 7 killed, 2 timeout, 12 survived, 6 no-coverage — genuine survivors include unchecked token values in the response body and the require.main===module server-start guard, which the test suite never exercises"
