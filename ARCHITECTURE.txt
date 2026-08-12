@@ -13,6 +13,18 @@ workspaces; lerna.json configures Lerna (npm client, independent
 versioning); `lerna run <script>` executes that script in every
 workspace that defines it.
 
+PROVEN: real independent semantic versioning (Lerna's actual reason
+for existing here, not just running scripts):
+  npx lerna version minor --yes
+    designsystemharness-backend:          1.0.0 -> 1.1.0
+    designsystemharness-frontend-angular: 0.0.0 -> 0.1.0
+    designsystemharness-frontend-react:   0.0.0 -> 0.1.0
+Real git tags were created (designsystemharness-backend@1.1.0, etc.)
+and a real "Publish" commit bumping all 3 package.json versions -
+genuinely tracking that the theme-presets feature shipped as a new
+minor version of each independently-versioned package, which is what
+a design-system repo with multiple framework consumers actually needs.
+
 Per-module (still available individually):
 backend:
   cd backend && npm install && npm test && npm start   # listens on $PORT or 3000
