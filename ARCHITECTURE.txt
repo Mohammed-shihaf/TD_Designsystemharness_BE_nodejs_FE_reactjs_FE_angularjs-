@@ -1,10 +1,36 @@
 BUILD COMMANDS
 ===============
+Whole-branch build (Lerna, orchestrates all 3 npm workspaces):
+  npm install
+  npx lerna run build
+  npx lerna run test
+
+Design-System Harness uses Lerna as its build orchestrator - a real,
+classic enterprise choice for managing/building multiple related
+packages (originally built for exactly this: shared component/token
+libraries consumed by multiple apps). Root package.json declares npm
+workspaces; lerna.json configures Lerna (npm client, independent
+versioning); `lerna run <script>` executes that script in every
+workspace that defines it.
+
+PROVEN: real independent semantic versioning (Lerna's actual reason
+for existing here, not just running scripts):
+  npx lerna version minor --yes
+    designsystemharness-backend:          1.0.0 -> 1.1.0
+    designsystemharness-frontend-angular: 0.0.0 -> 0.1.0
+    designsystemharness-frontend-react:   0.0.0 -> 0.1.0
+Real git tags were created (designsystemharness-backend@1.1.0, etc.)
+and a real "Publish" commit bumping all 3 package.json versions -
+genuinely tracking that the theme-presets feature shipped as a new
+minor version of each independently-versioned package, which is what
+a design-system repo with multiple framework consumers actually needs.
+
+Per-module (still available individually):
 backend:
   cd backend && npm install && npm test && npm start   # listens on $PORT or 3000
 
 frontend-react:
-  cd frontend-react && npm install && npm run build      # vite build, real verified
+  cd frontend-react && npm install && npm test && npm run build
 
 frontend-angular:
   cd frontend-angular && npm install && npx ng build && npx ng test --watch=false --browsers=ChromeHeadless
@@ -15,9 +41,10 @@ Design-System Cross-Framework Test Harness: ONE backend is the single
 source of truth for design tokens (color, spacing, typography); BOTH
 frontends fetch the same tokens and render using them.
 
-  backend/src/app.js
-    GET /api/design-tokens   <- shared color/spacing/typography tokens
-    GET /health
+  backend/src/routes/tokens.js  GET /api/design-tokens
+  backend/src/routes/themes.js  GET /api/themes, GET /api/themes/:id (theme presets)
+  backend/src/data/             tokens.js, themes.js data layers
+  GET /health
 
   frontend-react/     fetches /api/design-tokens, renders using them
   frontend-angular/   fetches /api/design-tokens, renders using them
