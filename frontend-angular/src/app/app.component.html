@@ -1,4 +1,5 @@
-<div *ngIf="tokens" [style.background]="tokens.color.primary" [style.padding]="tokens.spacing.lg">
-  <h1 [style.fontFamily]="tokens.typography.fontFamily" style="color: #fff">{{ title }}</h1>
+<div *ngIf="activeTokens() as t" [style.background]="t.color.primary" [style.padding]="t.spacing.lg">
+  <h1 [style.fontFamily]="t.typography.fontFamily" style="color: #fff">{{ title }}</h1>
+  <app-theme-picker [themes]="themes" (select)="onSelect($event)"></app-theme-picker>
 </div>
 <p *ngIf="!tokens">Loading tokens…</p>
