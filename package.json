@@ -1,0 +1,10 @@
+{
+  "name": "designsystemharness-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["backend", "frontend-react", "frontend-angular"],
+  "packageManager": "npm@10.9.4",
+  "devDependencies": {
+    "lerna": "^8.1.9"
+  }
+}
